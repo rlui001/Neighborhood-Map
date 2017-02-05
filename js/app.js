@@ -1,3 +1,4 @@
+// Hard-coded locations
 var locations = [
 	{
 		name: "Parking Lot 26",
@@ -45,3 +46,39 @@ var locations = [
 
 ];
 
+// Location object constructor
+function Location(data) {
+	this.name = data.name;
+	this.lat = data.lat;
+	this.long = data.long;
+	this.street = "";
+	this.city = "";
+}
+
+//Global variables
+var map;
+
+function ViewModel() {
+	var self = this;
+
+	// Create the array for the list
+	this.listArray = ko.observableArray([]);
+
+	// Populate the array with the hard-coded locations
+	locations.forEach(function(loc) {
+		self.listArray.push(new Location(loc));
+	});
+
+	// Initialze map area(UCR) using Google Maps
+	map = new google.maps.Map(document.getElementById('map'), {
+		zoom: 15,
+		center: {lat: 33.973804, lng: -117.3312105}
+	});
+}
+
+
+
+// Allows initialization of app when Google makes callback
+function initApp() {
+	ko.applyBindings(new ViewModel());
+}

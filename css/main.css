@@ -1,8 +1,48 @@
+html,body,.container-fluid {
+	height: 100%;
+	background-color: grey;
+}
+
+.container-fluid {
+	display: table;
+	width: 100%;
+	margin-top: -50px;
+	padding: 50px 0 0 0;
+	box-sizing: border-box;
+}
+
+.row {
+	height: 100%;
+	display: table-row;
+}
+
+
+/* Maintains right layout for browsers    */
+@media (min-width:992px) {
+	.row .no-float {
+		display: table-cell;
+		float: none;
+	}
+}
+
 .list {
-	background-color: red;
+	background-color: #45565c;
 }
 
 
-.map {
-	background-color: blue;
+#map {
+	background-color: #ADD8E6;
 }
+
+/*@media (max-width:991px) {
+	.container-fluid {
+		display: flex;
+	}
+	.list {
+		order: 1;
+	}
+	#map {
+		float: none;
+		width: 100%;
+	}
+}*/

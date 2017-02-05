@@ -12,27 +12,20 @@
 	<body>
 		<div class="container-fluid">
 			<div class="row">
-				<div class="col-md-3 list" id="list_container">
+				<div class="col-md-3 list no-float" id="list_container">
 
+				<!-- Search box goes here -->
 
+				<ul class="list-group" data-bind="foreach: listArray">
+				<li class="list-group-item" data-bind="text: name"></li>
 
-				List stuff goes here
-
-
-
-
+				</ul>
 
 
 				</div>
 
 
-				<div class="col-md-9 map" id="map">
-
-
-				Map stuff goes here
-
-
-
+				<div class="col-md-9 no-float" id="map">
 
 				</div>
 
@@ -40,9 +33,12 @@
 		</div>
 	</body>
 
+
 	<script src='js/knockout-3.4.1.js'></script>
 	<script src='js/app.js'></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1GOyXq7Q4MvjSTExckpDE8UrTpezfoh0&callback=initApp"></script>
+
 
 
 </html>
