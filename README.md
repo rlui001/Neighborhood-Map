@@ -5,8 +5,7 @@ I have decided to use my school campus as the area of interest, with markers at 
 
 
 THINGS TO DO:
-
-- Add search functionality
+- Clicking on list --> action to the marker
 
 - Add markers
 	- Add animation when clicked, etc.
