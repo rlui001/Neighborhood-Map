@@ -9,6 +9,7 @@ THINGS TO DO:
 - Add search functionality
 
 - Add markers
+	- Add animation when clicked, etc.
 
 - Add info box when marker/list item is clicked
 	- use Yelp for the data?
