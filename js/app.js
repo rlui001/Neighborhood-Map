@@ -1,3 +1,6 @@
+// Global variables
+var map;
+
 // Hard-coded locations
 var locations = [
 	{
@@ -48,15 +51,25 @@ var locations = [
 
 // Location object constructor
 function Location(data) {
+	var self = this;
+
 	this.name = data.name;
 	this.lat = data.lat;
 	this.long = data.long;
 	this.street = "";
 	this.city = "";
+
+	// visibility setting
+	this.visible = ko.observable(true);
+
+	// Give each location a marker
+	this.marker = new google.maps.Marker({
+		position: {lat: data.lat, lng: 	data.long},
+		title: data.name
+	});
+
 }
 
-//Global variables
-var map;
 
 function ViewModel() {
 	var self = this;
@@ -69,11 +82,23 @@ function ViewModel() {
 		self.listArray.push(new Location(loc));
 	});
 
-	// Initialze map area(UCR) using Google Maps
+	// Initialize map area(UCR) using Google Maps
 	map = new google.maps.Map(document.getElementById('map'), {
 		zoom: 15,
 		center: {lat: 33.973804, lng: -117.3312105}
 	});
+
+	// Create markers based on visibility
+	// Possibly make it also based on filter
+	this.listArray().forEach(function(object) {
+		if (object.visible() == true) {
+			object.marker.setMap(map);
+		}
+		else {
+			object.marker.setMap(null);
+		}
+	});
+
 }
 
 
