@@ -74,6 +74,9 @@ function Location(data) {
 function ViewModel() {
 	var self = this;
 
+	// Search filter variable
+	this.filterLocation = ko.observable("");
+
 	// Create the array for the list
 	this.listArray = ko.observableArray([]);
 
@@ -88,16 +91,53 @@ function ViewModel() {
 		center: {lat: 33.973804, lng: -117.3312105}
 	});
 
-	// Create markers based on visibility
-	// Possibly make it also based on filter
-	this.listArray().forEach(function(object) {
-		if (object.visible() == true) {
-			object.marker.setMap(map);
+	//Place markers based on visibility setting
+	placeMarkers = ko.computed(function() {
+		self.listArray().forEach(function(object) {
+			if (object.visible() == true) {
+				object.marker.setMap(map);
+			}
+			else {
+				object.marker.setMap(null);
+			}
+		});
+	});
+	// this.listArray().forEach(function(object) {
+	// 	if (object.visible() == true) {
+	// 		object.marker.setMap(map);
+	// 	}
+	// 	else {
+	// 		object.marker.setMap(null);
+	// 	}
+	// });
+
+	// Create a filtered list
+	this.filterLocations = ko.computed(function() {
+		if(!self.filterLocation()) {
+			self.listArray().forEach(function(object) {
+				object.visible(true);
+			});
+			return self.listArray();
 		}
 		else {
-			object.marker.setMap(null);
+			return ko.utils.arrayFilter(self.listArray(), function(fil) {
+				filter = self.filterLocation().toLowerCase();
+				if (fil.name.toLowerCase().indexOf(filter) !== -1) {
+					fil.visible(true);
+					return fil.name.toLowerCase().indexOf(filter) !== -1;
+				}
+				else {
+					fil.visible(false);
+				}
+
+			});
 		}
 	});
+
+
+
+
+
 
 }
 
