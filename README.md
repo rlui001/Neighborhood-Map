@@ -9,5 +9,5 @@ I have decided to use my school campus as the area of interest, with markers at 
 
 
 To run:
-1. Download and extract files into any directory
-2. Open index.html
+- Download and extract files into any directory
+- Open index.html
