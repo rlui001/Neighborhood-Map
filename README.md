@@ -6,3 +6,8 @@ I have decided to use my school campus as the area of interest, with markers at 
 
 - Found Yelp API v3 unable to be used with javascript (could not retrieve access token).
 - Yelp API v2 also gave GET errors, so I ended up using FourSquare's API to get location street/city.
+
+
+To run:
+1. Download and extract files into any directory
+2. Open index.html
