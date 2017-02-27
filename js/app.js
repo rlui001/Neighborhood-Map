@@ -1,47 +1,47 @@
 // Global variables
 var map;
-var client_id = "3M2YWCXV1EUHGMV5G3ZECFD1NSAS3MK3L3XP13YHGWAKMQ1I";
-var client_secret = "5XHE0YMUE5IYD0AMSFZXE34VBT2HRTCTIM4XYOHQXGAUHVAP";
+var CLIENT_ID = '3M2YWCXV1EUHGMV5G3ZECFD1NSAS3MK3L3XP13YHGWAKMQ1I';
+var CLIENT_SECRET = '5XHE0YMUE5IYD0AMSFZXE34VBT2HRTCTIM4XYOHQXGAUHVAP';
 
 // Hard-coded locations
 var locations = [
 	{
-		name: "Lot 26",
+		name: 'Lot 26',
 		lat: 33.9749888,
 		long: -117.3332816
 	},
 	{
-		name: "Spieth Hall",
+		name: 'Spieth Hall',
 		lat: 33.9724408,
 		long: -117.3267614
 	},
 	{
-		name: "Psychology Building",
+		name: 'Psychology Building',
 		lat: 33.9722429,
 		long: -117.3264968
 	},
 	{
-		name: "The HUB",
+		name: 'The HUB',
 		lat: 33.9744116,
 		long: -117.3279558
 	},
 	{
-		name: "Bell Tower",
+		name: 'Bell Tower',
 		lat: 33.9736597,
 		long: -117.3277122
 	},
 	{
-		name: "Bourns A125",
+		name: 'Bourns A125',
 		lat: 33.975592,
 		long: -117.327635
 	},
 	{
-		name: "UCR Recreation Center",
+		name: 'UCR Recreation Center',
 		lat: 33.9705396,
 		long: -117.328748
 	},
 	{
-		name: "Pentland Hills Residence",
+		name: 'Pentland Hills Residence',
 		lat: 33.9561598,
 		long: -117.325555
 	}
@@ -58,8 +58,12 @@ function Location(data) {
 	this.name = data.name;
 	this.lat = data.lat;
 	this.long = data.long;
-	this.street = "";
-	this.city = "";
+	this.checkins = '';
+	this.street = '';
+	this.city = '';
+
+	// infowindow
+	this.infoWindow = new google.maps.InfoWindow({content: self.contentString});
 
 	// visibility setting
 	this.visible = ko.observable(true);
@@ -71,7 +75,7 @@ function Location(data) {
 	});
 
 	// Get auth token from foursquare
-	var URL = 'https://api.foursquare.com/v2/venues/search?ll='+ this.lat + ',' + this.long + '&client_id=' + client_id + '&client_secret=' + client_secret + '&v=20170225' + '&query=' + this.name;
+	var URL = 'https://api.foursquare.com/v2/venues/search?ll='+ this.lat + ',' + this.long + '&client_id=' + CLIENT_ID + '&client_secret=' + CLIENT_SECRET + '&v=20170225' + '&query=' + this.name;
 	$.getJSON(URL).done(function(results) {
 		var data = results.response.venues[0];
 		if (data.location.formattedAddress.length == 2) {
@@ -82,9 +86,11 @@ function Location(data) {
 			self.street = data.location.formattedAddress[0];
 			self.city = data.location.formattedAddress[1];
 		}
-		console.log(self.street);
+		self.checkins = data.stats.checkinsCount;
+		console.log(data);
 	}).fail(function() {
-		alert("Ran into an issue while attempting API call from FourSquare.");
+		// Eventually fix; alert pops up for each object 
+		alert('Ran into an issue while attempting API call from FourSquare.');
 	});
 
 	// Add bounce animation when clicked
@@ -94,32 +100,24 @@ function Location(data) {
 	// separate function needed to click on the marker
 	// contentString and infoWindow created separately so it gets the updated values after API call from foursquare
 	function bounce() {
-	self.contentString = '<h1 id="title">'+self.name+'</h1>'+'<div id="body">'+self.street + '</div>' + '<div id="body">' +self.city+'</div>';
-	self.infoWindow = new google.maps.InfoWindow({content: self.contentString});
-		if (self.marker.getAnimation() !== null) {
-			self.marker.setAnimation(null);
-		} else {
+	self.contentString = '<h1 id="title">'+self.name+'</h1>'+'<div id="body">'+ self.street + '</div>' + '<div id="body">' + self.city +'</div>' + '<div id="body">Check-ins: ' + self.checkins + '</div>';
+	self.infoWindow.setContent(self.contentString);
 			self.marker.setAnimation(google.maps.Animation.BOUNCE);
 			self.infoWindow.open(map,self.marker);
 			setTimeout(function() {
 				self.marker.setAnimation(null);
 			}, 2700);
-		}
-	}
+	};
 
 	this.animate = function () {
-	self.contentString = '<h1 id="title">'+self.name+'</h1>'+'<div id="body">'+self.street + '</div>' + '<div id="body">' +self.city+'</div>';
-	self.infoWindow = new google.maps.InfoWindow({content: self.contentString});
-		if (self.marker.getAnimation() !== null) {
-			self.marker.setAnimation(null);
-		} else {
+	self.contentString = '<h1 id="title">'+self.name+'</h1>'+'<div id="body">'+ self.street + '</div>' + '<div id="body">' + self.city +'</div>' + '<div id="body">Check-ins: ' + self.checkins + '</div>';
+	self.infoWindow.setContent(self.contentString);
 			self.marker.setAnimation(google.maps.Animation.BOUNCE);
 			self.infoWindow.open(map, self.marker);
 			setTimeout(function() {
 				self.marker.setAnimation(null);
 			}, 2700);
-		}
-	}
+	};
 
 }
 
@@ -147,7 +145,7 @@ function ViewModel() {
 	//Place markers based on visibility setting
 	placeMarkers = ko.computed(function() {
 		self.listArray().forEach(function(object) {
-			if (object.visible() == true) {
+			if (object.visible() === true) {
 				object.marker.setMap(map);
 			}
 			else {
